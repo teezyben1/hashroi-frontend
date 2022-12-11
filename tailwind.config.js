@@ -1,12 +1,14 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      backgroundImage: {
-        'main-bg': "url('./src/assets/crypto2.png')",
-        // 'footer-texture': "url('/img/footer-texture.png')",
+
+      fontFamily: {
+        nunito: ['"Nunito"', ...defaultTheme.fontFamily.sans]
       },
+     
 
       margin: {
         320: '320px',
