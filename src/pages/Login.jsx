@@ -1,10 +1,14 @@
 import React from 'react'
 import { BiUserCheck } from 'react-icons/bi'
+import { useNavigate } from 'react-router-dom'
 
 export const Login = () => {
+  const navigate = useNavigate()
 
 // handleSubmit function
-const handleSubmit = () =>{}
+const handleSubmit = () =>{
+  navigate('/home')
+}
 
 // fetch data from API
 

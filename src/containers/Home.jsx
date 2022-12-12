@@ -17,6 +17,7 @@ import { HalongPlan } from '../plans/HalongPlan'
 import { SuperPlan } from '../plans/SuperPlan'
 import { WaltonPlan } from '../plans/WaltonPlan'
 import { AsicPlan } from '../plans/AsicPlan'
+import { Signup } from '../pages/Signup'
 
 
 
@@ -64,7 +65,7 @@ export const Home = () => {
       </div> 
       <div className='p-5 flex-1 h-screen overflow-y-scroll' ref={scrollRef}>
       <Routes>
-        <Route path='/' element={<MiningPlan/>}/>
+        <Route path='/home' element={<MiningPlan/>}/>
         <Route path='/recent-mining' element={<RecentMining/>}/>
         <Route path='/my-stats' element={<MyStats/>} />
         <Route path='/withdrawal' element={<Withdrawal/>}/>

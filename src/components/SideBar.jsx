@@ -9,6 +9,8 @@ import { RiLogoutCircleLine } from 'react-icons/ri'
 import { Link, NavLink } from 'react-router-dom'
 
 export const SideBar = ({closeToggle} ) => {
+  const [balance, setBalance] = useState(2000)
+
   
   const isActiveStyle = 'flex items-center px-5 gap-3 font-extrabold border-r-2 border-black transition-duration-all duration-200 ease-in-out capitalize'
   const isNotActiveStyle = 'flex items-center px-5 gap-3 text-gray-100 hover:text-black transition-duration-all duration-200 ease-in-out capitalize'
@@ -25,14 +27,15 @@ const handleCloseSidebar =()=> {
   return (
     <div className='flex flex-col justify-between bg-green-500 h-full overflow-y-scroll min-w-210 hide-scrollbar'>
       <div>
-      <div className='flex flex-col p-1 items-center bg-green-500 mb-5'>
+      <div className='flex flex-col p-1 items-center bg-green-700 mb-5'>
         {/* TODO get the first character of user name */}
         <div className='w-10 h-10 bg-green-300 rounded-full text-center text-4xl mt-2 text-gray-900 mb-1'><h1>B</h1></div>
-        <div className='text-2xl text-gray-900'><p>Benjamin</p></div>
+        <div className='text-3xl text-gray-900 font-nunito'><p>Benjamin</p></div>
+        <div><p className='font-nunito text-2xl mt-2'>${balance}</p></div>
       </div>
       
       <div className='flex  gap-2 p-4 items-center justify-center'   >
-        <NavLink to={'/'} className={({isActive}) => isActive ? isActiveStyle : isNotActiveStyle} onClick={handleCloseSidebar}>
+        <NavLink to={'/home'} className={({isActive}) => isActive ? isActiveStyle : isNotActiveStyle} onClick={handleCloseSidebar}>
         <GiMiner className="w-9 h-9"/>
         <h3>Mining Plans</h3>
         </NavLink>
