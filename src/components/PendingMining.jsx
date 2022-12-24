@@ -1,14 +1,14 @@
 import React,{useState, useEffect } from 'react'
 import { GiProcessor } from 'react-icons/gi'
 import { MiningPlan } from './MiningPlan'
-import {currentMining} from '../hooks/getCurrentMinings'
+import {pendingMining} from '../hooks/getPendingPlan'
 import  formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { fetchUser } from "../utils/fetchUser"
 
 
 
-export const CurrentMining = () => {
-  const [endDate, setEndDate] = useState()
+
+export const  PendingMining = () => {
   const userInfo = fetchUser()
 
   
@@ -16,11 +16,14 @@ export const CurrentMining = () => {
 
   useEffect(() => {
     (async() => {
-     const Data = await currentMining(userInfo.id)
-     setData(Data.currentPlans)
-     
+     const Data = await pendingMining(userInfo.id)
+     setData(Data.pendingPlans)
+    
+  
     })()
     
+
+
   },[])
 
   
@@ -30,8 +33,7 @@ export const CurrentMining = () => {
 
   return (
     <div className='relative'>
-      <h1 className='text-center text-gray-900 text-3xl font-nunito mb-8'>Your current mining</h1>
-    
+      <h1 className='text-center text-gray-900 text-3xl font-nunito mb-8'>Your pending mining</h1>
       {data.map((plan) => (
 
       <div className='bg-green-300 rounded-xl flex flex-col mb-5 '>
@@ -48,7 +50,7 @@ export const CurrentMining = () => {
         
         <div className='absolute right-0 flex  bg-red-600 mx-auto rounded-xl'>
           <GiProcessor className='w-6 h-6 '/>
-          <p className='text-lg  '>Mining....</p>
+          <p className='text-lg  '>Pending....</p>
         </div>
 
       </div>

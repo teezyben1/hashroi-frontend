@@ -1,29 +1,63 @@
-import React from 'react'
+import React,{useState, useEffect } from 'react'
 import { GiProcessor } from 'react-icons/gi'
-import { FcApproval } from 'react-icons/fc'
 import { MiningPlan } from './MiningPlan'
-export const RecentMining = () => {
+import {mined} from '../hooks/getMinedPlan'
+import  formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { fetchUser } from "../utils/fetchUser"
+
+
+
+
+export const  RecentMining = () => {
+  const userInfo = fetchUser()
+
+  
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    (async() => {
+     const Data = await mined(userInfo.id)
+     setData(Data.minedPlans)
+    
+  
+    })()
+    
+
+
+  },[])
+
+  
+
+
+
+
   return (
     <div className='relative'>
-      <h1 className='text-center text-gray-900 text-3xl font-nunito mb-8'>Your previous mining</h1>
-      <div className='bg-green-300 rounded-xl flex flex-col '>
-        <div className='bg-green-300 p-2'><span className='font-bold uppercase'> Plan: </span> <span className='font-semibold'> Test Plan</span></div>
-        <div className='bg-green-900 p-2'><span className='font-bold uppercase'> amount: </span> <span className='font-semibold bg-red-200 rounded-md p-1'> $500</span></div>
-        <div className='p-2'><span className='font-bold uppercase'> roi: </span> <span className='font-semibold bg-red-200 rounded-md p-1'> 5%</span></div>
-        <div className='bg-green-900 p-2'><span className='font-bold uppercase'> days: </span> <span className='font-semibold bg-red-200 rounded-md p-1'> 10</span></div>
+      <h1 className='text-center text-gray-900 text-3xl font-nunito mb-8'>Your recent mining</h1>
+      {data.map((plan) => (
 
-        <div className= ' bg-green-300 p-2'><span className='font-bold uppercase'> profit: </span> <span className='font-semibold bg-red-200 rounded-md p-1'> $250</span></div>
-        <div className='bg-green-900 p-2 flex gap-3'><span className='font-bold uppercase'> total: </span> <span className='font-semibold bg-red-200 rounded-md p-1'> $750</span> <FcApproval className='w-9 h-9'/></div>
+      <div className='bg-green-300 rounded-xl flex flex-col mb-5 gap-2'>
+        <div className='bg-green-300 p-2'><span className='font-bold uppercase font-nunito'> Plan: </span> <span className='font-nunito text-lg'>{plan.planName}</span></div>
+        <div className='bg-green-900 p-2'><span className='font-bold uppercase font-nunito'> amount: </span> <span className='font-semibold font-nunito bg-red-200 rounded-md p-1'>${plan.amount}</span></div>
+        {/* <div className='p-2'><span className='font-bold uppercase font-nunito'> roi: </span> <span className='font-semibold bg-red-200 font-nunito rounded-md p-1'> %{}</span></div> */}
+        <div className='bg-green-300 p-2'><span className='font-bold uppercase font-nunito'> days: </span> <span className='font-semibold font-nunito bg-red-200 rounded-md p-1'>{plan.days}</span></div>
 
-        <div className='bg-green-300 p-2'><span className='font-bold uppercase'> started: </span> <span className='font-semibold'> 22-nov-2022</span></div>
-        <div className='bg-green-900 p-2'><span className='font-bold uppercase'> ends: </span> <span className='font-semibold'> 01-dec-2022</span></div>
+        <div className= ' bg-green-900 p-2'><span className='font-bold uppercase font-nunito'> profit: </span> <span className='font-semibold font-nunito bg-red-200 rounded-md p-1'> ${plan.profit.toFixed()}</span></div>
+        <div className='bg-green-300 p-2'><span className='font-bold uppercase font-nunito '> total: </span> <span className='font-semibold font-nunito bg-red-200 rounded-md p-1'> ${plan.total.toFixed()}</span></div>
+
+        {/* <div className='bg-green-900 p-2'><span className='font-bold uppercase font-nunito'> started: </span> <span className='font-semibold font-nunito text-gray-900'>{formatDistanceToNow(new Date(plan.createdAt),{ addSuffix:true })}</span></div>
+        <div className='bg-green-300 p-2'><span className='font-bold uppercase font-nunito'> ends: </span> <span className='font-semibold font-nunito text-gray-100'> {formatDistanceToNow(new Date(plan.createdAt ).setDate(new Date(plan.createdAt ).getDate() + 10))}</span></div> */}
         
-        <div className='absolute right-0 flex  bg-green-900 mx-auto rounded-xl'>
-        <FcApproval className='w-9 h-9'/>
-          <p className='text-lg text-gray-100 pr-1'>Mined</p>
+        <div className='absolute right-0 flex  bg-red-600 mx-auto rounded-xl'>
+          <GiProcessor className='w-6 h-6 '/>
+          <p className='text-lg  '>mined....</p>
         </div>
 
       </div>
+
+      ))
+       }
+
       <div className='mt-10 text-center capitalize font-nunito text-2xl'><h1>add more mining to your current mining</h1></div>
         <MiningPlan/>
 

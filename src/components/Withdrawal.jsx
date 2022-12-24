@@ -1,5 +1,9 @@
-import React, { useState } from 'react'
-import { BiBitcoin } from 'react-icons/bi'
+import React, { useEffect, useState } from 'react'
+import { userFromDb } from '../hooks/getUserInfo'
+import { ThreeDots } from 'react-loader-spinner'
+import { fetchUser } from '../utils/fetchUser'
+import{ useWithdrawal} from '../hooks/useWithdrawal'
+
 
 export const Withdrawal = () => {
     const [paymentMethod, setPaymentMethod] = useState('')
@@ -13,6 +17,12 @@ export const Withdrawal = () => {
     const [amountError, setAmountError] = useState('hidden')
     const [cryptoAddress, setCryptoAddress ] = useState('')
     const [balance, setBalance] = useState(2000)
+    const [loader, setLoader] = useState('hidden')
+    const {withdraw, isLoading, error} =  useWithdrawal()
+
+    const userInfo = fetchUser()
+      const userId = userInfo.id
+
 
 
     const reset = ()=> {
@@ -73,6 +83,24 @@ export const Withdrawal = () => {
         
     }
 
+    const handleWithdraw = async(e) => {
+        e.preventDefault()
+        setLoader('block')
+        await withdraw(userId,amount, paymentMethod, address)
+
+    }
+    
+
+    useEffect(() => {
+        
+          (async() => {
+            const Data = await userFromDb(userId)
+            setBalance(Data.user.balance)
+           
+           })();
+        
+      },[])
+
 
 
   return (
@@ -83,7 +111,7 @@ export const Withdrawal = () => {
       </div>
         <div className={`${amountError} mb-3 bg-gray-200 w-[330px] rounded-sm`}><h1 className='text-red-600 text-lg capitalize'>insufficient balance</h1></div>
     
-        <form className='flex flex-col gap-2'>
+        <form onSubmit={handleWithdraw} className='flex flex-col gap-2'>
            
             <div className='flex flex-col '>
                 <label htmlFor="amount" className='text-lg font-nunito-200 text-gray-900 font-semibold' >Amount$:</label>
@@ -123,7 +151,18 @@ export const Withdrawal = () => {
             <div className={`${showInfo} mt-2`}>
                 <p className='text-sm text-red-400'>{amountInCrypto} will be sent to the above address once withdrawal is approved. Approval takes 3 to 24 hours  </p>
                 {/* TODO function for submitting mining plan to database */}
+                <div className='flex items-center'>
                 <button className={`bg-green-300 p-2 rounded-full mt-5 capitalize text-gray-900 font-semibold`}>withdraw</button>
+                {/* <div className={`${loader} mt-4`}>
+                  <ThreeDots
+                      type="circle"
+                      color='white'
+                      height={30}
+                      width={100}
+                    />
+                </div> */}
+
+                </div>
             </div>
         </form>
     </div>

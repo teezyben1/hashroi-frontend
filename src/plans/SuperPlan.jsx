@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useCreatePlan } from '../hooks/useCreatePlan'
+import { fetchUser } from '../utils/fetchUser'
 
 export const SuperPlan = () => {
     const [paymentMethod, setPaymentMethod] = useState('')
@@ -10,6 +12,17 @@ export const SuperPlan = () => {
     const [walletAddress, setWalletAddress] = useState('')
     const [showInfo, setShowInfo] = useState('hidden')
     const [amountError, setAmountError] = useState('hidden')
+    const [profit, setProfit] = useState(0)
+    const [total, setTotal] = useState(0)
+    const [showProfit, setShowProfit] = useState('hidden')
+    const [planName, setPlanName] = useState('Super plan')
+    const {createPlan, isLoading, error} =  useCreatePlan()
+    const [roi, setRoi] = useState(5)
+    const[days,setdays] =useState(182)
+
+      // GETTING USER INFO FROM THE BROWSER LOCAL_STORAGE 
+  const userInfo = fetchUser()
+  const userId = userInfo.id
 
 
     const reset = ()=> {
@@ -17,11 +30,15 @@ export const SuperPlan = () => {
         setShowAddress('hidden')
         setShowInfo('hidden')
         setAmountError('hidden')
+        setShowProfit('hidden')
     }
 
     const check = (e) => {
         e.stopPropagation();
         e.preventDefault();
+        setShowProfit('block')
+        setProfit(5 / 100 * amount  )
+        setTotal(5 / 100 * amount  + +amount)
         if(amount < 100000){
             setAmountError('block')
         }else if(amount > 500000){
@@ -67,58 +84,72 @@ export const SuperPlan = () => {
     }
         
     }
+    const createMiningPlan = async(e) => {
+        e.preventDefault()
+            await createPlan( userId, planName, amount, profit, total, roi, days, paymentMethod)
+    }
 
 
 
   return (
-    <div className='    mt-10  shadow-sm  h-full '>
-        <div className={`${amountError} mb-3 bg-gray-200 w-[330px] rounded-sm`}><h1 className='text-red-600 text-sm'>Amount should range from $100,000 - $500,000</h1></div>
+    <div className=' shadow-sm  h-full '>
+        <div className={`${amountError} mb-3 bg-gray-200 w-[330px] rounded-sm font-nunito `}><h1 className='text-red-600 text-sm'>Amount should range from $100,000 - $500,000</h1></div>
     
-        <form className='flex flex-col gap-2'>
+        <form onSubmit={createMiningPlan} className='flex flex-col gap-2'>
             <div className='flex flex-col   '>
-                <label htmlFor="planName" className='text-lg font-nunito-200 text-gray-900 font-semibold'>Plan:</label>
-                <input  type="text" className='border-2 p-1 w-[200px] text-xl rounded-md border-gray-600' value="Super Rig Plan" disabled  />
+                <label className='text-lg font-nunito text-gray-900 capitalize '>plan:</label>
+                <input  type="text" className='font-nunito border-2 p-1 w-[200px] capitalize text-xl rounded-md border-gray-600' value={planName} disabled  />
+            </div>
+            <div className='flex flex-col   '>
+                <label  className='text-lg font-nunito text-gray-900 font-semibold'>Roi:</label>
+                <input  type="text" className='font-nunito border-2 p-1 w-[200px] text-xl rounded-md border-gray-600' value={`${roi}%`} disabled  />
             </div>
             <div className='flex flex-col '>
-                <label htmlFor="amount" className='text-lg font-nunito-200 text-gray-900 font-semibold' >Amount$:</label>
-                <input onClick={reset}  onChange={(e) => setAmount(e.target.value)} value={amount} type="number" className='border-2 p-1 w-[200px] rounded-md text-xl border-gray-600'/>
+                <label  className='text-lg font-nunito text-gray-900 font-semibold' >Amount$:</label>
+                <input onClick={reset}  onChange={(e) => setAmount(e.target.value)} value={amount} type="number" className='font-nunito border-2 p-1 w-[200px] rounded-md text-xl border-gray-600'/>
+            </div>
+            <div className={` ${showProfit} flex flex-col `}  >
+              <p className='font-nunito capitalize text-gray-900'>profit: ${profit}</p>
+              <p className='font-nunito capitalize text-gray-900'>total return: ${total}</p>
             </div>
            
             <div className='flex flex-col mt-2'>
               <div>
-                    <p className='mb-2 font-semibold text-lg sm:text-xl text-gray-900'  >Choose a Payment Method</p>
+                    <p className='mb-2 font-nunito text-lg sm:text-xl text-gray-900'  >Choose a Payment Method</p>
                     <select
                     onClick={reset} 
                     onChange={(e) => setPaymentMethod(e.target.value)}
                     className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md capitalize cursor-pointer" 
                     >
-                        <option value="other" className='bg-white'>Select Category</option>
-                        <option className='text-base border-0 outline-none  bg-white text-black'
+                        <option value="other" className='bg-white font-nunito'>Select Category</option>
+                        <option className='text-base border-0 outline-none font-nunito bg-white text-black'
                             value="BTC">Bitcoin</option>
-                            <option className='text-base border-0 outline-none  bg-white text-black'
+                            <option className='text-base border-0 outline-none font-nunito  bg-white text-black'
                             value="LTC">Litecoin</option>
-                            <option className='text-base border-0 outline-none  bg-white text-black'
+                            <option className='text-base border-0 outline-none font-nunito  bg-white text-black'
                             value="ETH">Ethereum</option>
-                            <option className='text-base border-0 outline-none  bg-white text-black'
+                            <option className='text-base border-0 outline-none font-nunito  bg-white text-black'
                             value="TET">Tether TRC20</option>
                     </select>
               </div>
-               <p className='text-base text-gray-800 pt-3'>You are paying: {amountInCrypto}</p>
+              
+            
+               <p className='text-base text-gray-800 pt-3 font-nunito'>You are paying: {amountInCrypto}</p>
             </div>
               
 
             <div className='mx-auto  p-2 rounded-2xl w-50 '>
-                <button onClick={check} className={` ${showButton} bg-green-300 rounded-lg text-center mt-3 font-semibold text-lg text-gray-900 capitalize`} >{address}</button>
-                <div className='mt-5'>
-                    <p className='text-green-500 capitalize'>Please pay to this address</p>
-                    <h1 className={ `${showAddress} text-sm text-gray-900`}>{walletAddress}</h1>
+                <button onClick={check} className={` ${showButton} font-nunito bg-green-300 rounded-lg text-center mt-3 font-semibold text-lg text-gray-900 capitalize`} >{address}</button>
+                <div className='mt-1'>
+                    <p className='text-green-500 text-emerald-400 capitalize font-nunito'>Please pay to this address</p>
+                    <h1 className={ `${showAddress} text-sm font-nunito text-gray-900`}>{walletAddress}</h1>
                 </div>
             </div>
 
-            <div className={`${showInfo} mt-10`}>
+            <div className={`${showInfo} mt-5`}>
                 <p className='text-sm text-red-400'>Send  {amountInCrypto} to the above address. After you have made the payment come back and click start mining to activate your mining plan  </p>
                 {/* TODO function for submitting mining plan to database */}
-                <button className={`bg-green-300 p-2 rounded-full mt-5 capitalize text-gray-900 font-semibold`}>start mining</button>
+                <button className={`bg-green-300 p-2 rounded-full mt-7 capitalize text-gray-900 font-nunito`}>start mining</button>
             </div>
         </form>
     </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { HiMenu } from 'react-icons/hi'
   import { AiFillCloseCircle} from 'react-icons/ai'
-  import { Link, Route, Routes} from 'react-router-dom'
+  import { Link, Route, Routes, useNavigate} from 'react-router-dom'
   import { SideBar} from '../components/SideBar'
 
   import  h2  from '../assets/h2.png'
@@ -17,19 +17,43 @@ import { HalongPlan } from '../plans/HalongPlan'
 import { SuperPlan } from '../plans/SuperPlan'
 import { WaltonPlan } from '../plans/WaltonPlan'
 import { AsicPlan } from '../plans/AsicPlan'
-import { Signup } from '../pages/Signup'
+import { PendingMining } from '../components/PendingMining'
+import { SuccessPage } from '../components/SuccessPage'
+import { WithdrawSuccess } from '../components/WithdrawSuccess'
+import { fetchUser } from '../utils/fetchUser'
 
 
 
 export const Home = () => {
   const [toggleSidebar, setToggleSidebar ] = useState(false)
   const scrollRef = useRef(null)
-  
+  const[pendingPlan, setPendingPlan] = useState([])
+  const[currentPlan, setCurrentPlan] = useState([])
+  const[minedPlan, setMinedPlan] = useState([])
+  const [user, setUser] = useState(null )
+  const userInfo = fetchUser()
+
+  const navigate = useNavigate();
 
 
 
 
   useEffect(() =>{
+    setUser(userInfo)
+    if(!userInfo) navigate('/login')
+
+  },[])
+
+
+  // useEffect(() =>{
+    
+
+  // },[]) 
+
+
+
+  useEffect(() =>{
+
     scrollRef.current.scrollTo(0,0)
   },[])
 
@@ -40,7 +64,7 @@ export const Home = () => {
     <div className='flex bg-gray-200 md:flex-row flex-col h-screen transition-height duration-75 ease-out  '>
     {/* FOR SIDEBAR */}
       <div className='hidden md:flex h-screen flex-initial  '>
-        <SideBar/>
+        <SideBar user={userInfo && userInfo}/>
       </div>
         
         {/* FOR THE HEADER ON SMALL DEVICE */}
@@ -59,24 +83,27 @@ export const Home = () => {
                   <div className="absolute w-full flex justify-end items-center p-2">
                     <AiFillCloseCircle fontSize={30} className="cursor-pointer" onClick={() => setToggleSidebar(false)}/>   
                   </div>
-                  <SideBar closeToggle={setToggleSidebar}/>
+                  <SideBar closeToggle={setToggleSidebar} user={userInfo && userInfo}/>
               </div>
           )}
       </div> 
       <div className='p-5 flex-1 h-screen overflow-y-scroll' ref={scrollRef}>
       <Routes>
-        <Route path='/home' element={<MiningPlan/>}/>
-        <Route path='/recent-mining' element={<RecentMining/>}/>
-        <Route path='/my-stats' element={<MyStats/>} />
-        <Route path='/withdrawal' element={<Withdrawal/>}/>
+        <Route path='/' element={<MiningPlan/>}/>
+        <Route path='/recent-mining' element={<RecentMining user={userInfo && userInfo}/>}/>
+        <Route path='/pending-mining' element={<PendingMining  user={userInfo && userInfo}/>}/>
+        <Route path='/my-stats' element={<MyStats user={userInfo && userInfo}/>} />
+        <Route path='/withdrawal' element={<Withdrawal user={userInfo && userInfo}/>}/>
         <Route path='/faq' element={<Faq/>}/>
-        <Route path='/current-mining' element={<CurrentMining/>}/>
+        <Route path='/current-mining' element={<CurrentMining user={userInfo && userInfo}/>}/>
         <Route path='/test-plan' element={<TestPlan/>}/>
         <Route path='/bitmain-rig-plan' element={<BitmainPlan/>}/>
         <Route path='/halong-rig-plan' element={<HalongPlan/>}/>
         <Route path='/super-rig-plan' element={<SuperPlan/>}/>
         <Route path='/asic-rig-plan' element={<AsicPlan/>}/>
         <Route path='/Walton-rig-plan' element={<WaltonPlan/>}/>
+        <Route path='/success' element={<SuccessPage/>}/>
+        <Route path='/withdraw-success' element={<WithdrawSuccess/>}/>
 
       </Routes>
       </div>
