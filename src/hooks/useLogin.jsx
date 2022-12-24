@@ -14,7 +14,7 @@ const navigate = useNavigate()
         setError(null);
 
         
-        const response = await fetch('https://hashroi-api.onrender.com/login', {
+        const response = await fetch('https://elated-fatigues-bull.cyclic.app/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
