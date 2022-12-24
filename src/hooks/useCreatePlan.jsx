@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from 'react-router-dom'
 
 export const useCreatePlan = () => {
-    const URL = process.env.REACT_APP_URL
+    const URL = 'https://hashroi-api.onrender.com'
      const endPoint = 'create-mining'
       
     const navigate = useNavigate()

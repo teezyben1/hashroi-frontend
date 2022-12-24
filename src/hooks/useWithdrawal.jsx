@@ -12,7 +12,7 @@ export const useWithdrawal = () => {
 
 
     const withdraw = async (userId, amount,paymentMethod, address) => {
-        const URL = process.env.REACT_APP_URL
+        const URL = 'https://hashroi-api.onrender.com'
      const endPoint = 'withdraw'
         setIsLoading(true);
         setError(null);

@@ -8,7 +8,7 @@ const navigate = useNavigate()
 //  const[user, setUser] = useState(null)
 
     const signup = async (name,email,password,bitcoinAddress,liteAddress,etherAddress,tetherAddress) => {
-        const URL = process.env.REACT_APP_URL
+        const URL = 'https://hashroi-api.onrender.com'
      const endPoint = 'signup'
         setIsLoading(true);
         setError(null);

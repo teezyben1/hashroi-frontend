@@ -1,7 +1,7 @@
 
 
       // GETTING USER INFO FROM THE BROWSER LOCAL_STORAGE 
-      const URL = process.env.REACT_APP_URL
+      const URL ='https://hashroi-api.onrender.com'
      const endPoint = 'user-info'
      const endPoint1 = 'mined-plans'
      const endPoint2 = 'withdrawals'

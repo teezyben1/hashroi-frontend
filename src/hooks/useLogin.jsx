@@ -8,13 +8,13 @@ const navigate = useNavigate()
 //  const[user, setUser] = useState(null)
 
     const login = async (email,password) => {
-        const URL = process.env.REACT_APP_URL
-     const endPoint = 'login'
+        // const URL = 'https://hashroi-api.onrender.com'
+    //  const endPoint = 'login'
         setIsLoading(true);
         setError(null);
 
         
-        const response = await fetch(`${URL}/${endPoint}`, {
+        const response = await fetch('https://hashroi-api.onrender.com/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
